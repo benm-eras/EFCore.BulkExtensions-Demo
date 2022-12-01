@@ -27,13 +27,12 @@ internal class Program
 
         using DataContext context = host.Services.GetRequiredService<IDbContextFactory<DataContext>>().CreateDbContext();
 
-        IQueryable<Blog> query = context.Blogs.Where(b => b.Id > 0);
 
         // throws System.MissingMethodException here
-        int deleted = await query.BatchDeleteAsync();
-        
+        int deleted = await context.Blogs.Where(b => b.Id > 0).BatchDeleteAsync();
+
         // standard EF version is fine
-        // foreach (Blog blog in query)
+        // foreach (Blog blog in await context.Blogs.Where(b => b.Id > 0))
         //    context.Remove(blog);
         //
         // int deleted = await context.SaveChangesAsync();
